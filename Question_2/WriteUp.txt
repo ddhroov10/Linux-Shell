@@ -1,0 +1,123 @@
+Write Up - 
+
+Desciption of the program -
+	-The program keeps on taking the command from the user(using readline function) until he closes the terminal or types exit command.
+	-When the command comes, it is put in the category of either an internal command or an external command. 
+		-The internal commands do not require to create a new process and hence fork() and exec() is not called for them.
+		- The external commands require a new process and hence fork() and exec() is called for them.Even wait() system call is used to wait for the child process to terminate.
+
+Command taken along with their errors - 
+
+Internal Commands - 
+
+1. History command - Used to display the commands entered by the user on the terminal.
+
+Options taken - 
+	1. history -c - Used to clear the history
+	2. history -d offset - Used to remove the history command which is placed at the offset no.
+
+Error handling - 
+	1. If an invalid command is given, then it displays an error. (Ex - history djfls)
+	2. If an invalid offset or no offset is given in the history -d command, then the error is thrown. 
+
+2. Echo command - used to display line of text/string that are passed as an argument 
+
+Options taken - 
+	1. echo -n text -  this option is used to omit echoing trailing newline .
+	2. echo * -  this command will print all files/folders, similar to ls command .
+
+Error handling -(mainly for getcwd system call) 
+	1. ENOENT The current working directory has been unlinked.
+    2. ENOMEM Out of memory.
+
+3. pwd command - print name of current/working directory
+       1.pwd -L, --logical
+              use PWD from environment, even if it contains symlinks
+
+       2.pwd -P, --physical
+              avoid all symlinks
+
+Error handling -(mainly for getcwd system call) 
+	1. ENOENT The current working directory has been unlinked.
+    2. ENOMEM Out of memory.
+
+ 4. cd command - Change the shell working directory.
+Options taken - 
+	1. cd / - this command is used to change directory to the root directory, 
+	2. cd .. - this command is used to change directory to the parent directory.
+
+Error handling - 
+	1.Error changing directory
+	2.Invalid directory
+
+5.Exit command - Used to exit from the program
+Options taken - No option in manpages
+Error handling - Invalid argument or command
+
+
+External Command - 
+
+1. ls command - list directory contents
+Options taken - 
+	1. ls -a - do not ignore entries starting with .
+	2. ls -A -  do not list implied . and ..
+
+Error handling - 
+	1."Excess number of arguments"
+	2.Invalid argument
+
+2.Cat command -concatenate files and print on the standard output
+Options taken - 
+	1.cat -b - number nonempty output lines, overrides -n
+	2.cat -n - number all output lines
+
+Error handling - 
+	1.Invalid command
+	2. No such file or directory exist
+
+3.date command - print or set the system date and time
+Options taken - 
+	1. -u, --utc, --universal
+              print or set Coordinated Universal Time (UTC)
+
+	2. -R, --rfc-email
+              output date and time in RFC 5322 format.  Example: Mon,  14  Aug
+              2006 02:34:56 -0600
+
+Error handling -
+	1.Excess no. of arguments supplied
+	2.Invalid Command
+
+4.rm command - remove files or directories
+Options taken - 
+	1.-v - explain what is being done
+	2. -d - -d, --dir
+              remove empty directories
+
+Error handling - 
+	1.Is a directory - RM cannot delete a directory
+	2.No such file or directory
+
+
+5.Mkdir command - make directories
+Options Taken - 
+	1. --version -    output version information and exit
+	2. -v -  print a message for each created directory
+
+Error handling -
+	1.File exists
+	2.Excess number of arguments
+Assumptions - 
+
+1. History to be taken from opening of the shell and not from the beginning as it is a rudimentary shell.
+2. errno can display most of the errors and thus not displaying some small errors.
+
+
+Some Test cases:
+	All command written below works like - 
+	ls, echo hello, cd ..,pwd, mkdir filename, rm filename, and all other external and internal command work perfectly.
+
+	Some cases to see errors- 
+	1.Like not giving enough arguments to some of the commands.(Ex - mkdir)
+	2. Like giving excess of the commands to some of the commands(Ex - histor -c foo)
+	3. Like giving invalid commands(Ex -mkdir abc abs);
